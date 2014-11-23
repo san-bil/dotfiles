@@ -27,7 +27,7 @@ if __name__ == "__main__":
 
                 if not (new_item_parent == '~'):
                    mkdir_cmd = "mkdir -p "+new_item_parent
-                   print(mkdir_cmd)
+                   f.write(mkdir_cmd+'\n')
 
                 symlink_path = os.path.join(new_item_parent,item_name)
                 symlink_cmd = "ln -sf "+item+" "+symlink_path
