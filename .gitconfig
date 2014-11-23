@@ -1,0 +1,26 @@
+[user]
+	email = sanj.bilakhia@gmail.com
+	name = Sanjay Bilakhia
+[core]
+	excludesfile = ~/.gitignore_global
+    editor = vim
+	filemode = false
+[alias]
+    a = add
+    s = status
+    d = diff
+    c = commit
+    l = log --pretty=format:'%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr)%Creset' --abbrev-commit --date=relative --graph
+    rv = remote -v
+    co = checkout
+    o = checkout
+    ob = checkout -b
+    b = branch
+    
+[diff]
+    tool = vimdiff
+	submodule = log
+[status]
+	submodulesummary = 1
+
+

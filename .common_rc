@@ -1,0 +1,63 @@
+#---------------------Environment variables------------------------------
+
+export EDITOR=vim
+export HISTCONTROL=ignoredups:erasedups  # no duplicate entries
+export HISTSIZE=100000                   # big big history
+export HISTFILESIZE=100000               # big big history
+setopt APPEND_HISTORY                                    # append to history, don't overwrite it
+# Save and reload the history after each command finishes
+export PROMPT_COMMAND="history -a; history -c; history -r; $PROMPT_COMMAND"
+export PYTHONSTARTUP=$HOME/.pythonrc
+
+#---------------------Functions------------------------------
+
+pathadd() {
+    if [ -d "$1" ] && [[ ":$PATH:" != *":$1:"* ]]; then
+        PATH="${PATH:+"$PATH:"}$1"
+    fi
+}
+
+newpy() {
+    echo -e "import os\nimport sys\nimport shutil\n" > $1
+}
+
+my_trash(){
+	mkdir -p $HOME/$(echo $USER)_trash
+    mv $1 $HOME/$(echo $USER)_trash
+}
+
+#---------------------Aliases------------------------------
+
+alias hn='hostname'
+alias treel='tree -L'
+alias treel2="tree -L 2"
+alias vimro="vim -R"
+alias rm='trash'
+alias chmox="chmod +x"
+alias lsa="ls -alh"
+alias reproot='cd $(git rev-parse --show-toplevel)'
+alias projroot="cd $( pwd | sed 's/\/deps\/.*//g' )"
+
+alias bfg='java -jar ~/bin/bfg-1.11.5.jar'
+alias ump='update_matlab_project `pwd`'
+
+
+#---------------------Other------------------------------
+
+source $HOME/utils/common_utils.sh
+pathadd $HOME/utils
+
+user_rc_file=$HOME/.$(echo $USER)_rc
+if [ -f $user_rc_file ]; then
+	source $user_rc_file
+fi
+
+user_utils=$HOME/utils/$(echo $USER)_utils.sh
+if [ -f $user_utils ]; then
+	source $user_utils
+fi
+
+machine_rc_file=$HOME/.$(hostname)_rc
+if [ -f $machine_rc_file ]; then
+	source $machine_rc_file
+fi

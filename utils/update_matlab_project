@@ -1,0 +1,66 @@
+#!/bin/bash
+
+# initialize folder and file paths
+project_folder=$(readlink -f $1)
+project_src_folder=$project_folder/src
+deps_folder=$project_folder/deps
+new_deps_folder=$project_folder/new_deps
+cache_folder=$project_folder/cache
+data_folder=$project_folder/data
+output_folder=$project_folder/output
+matlab_requirements_file=$project_folder/matlab_requirements.txt
+addpath_script=$project_folder/project_addpath.m
+
+if [ -f $matlab_requirements_file ]; then
+
+    # make all required project sub-folders
+    [ -d $new_deps_folder  ] || mkdir $new_deps_folder
+    [ -d $cache_folder  ] || mkdir $cache_folder
+    [ -d $data_folder  ] || mkdir $data_folder
+    [ -d $output_folder  ] || mkdir $output_folder
+
+    [ -d $deps_folder  ] || mkdir $deps_folder
+    cd $deps_folder
+
+    # in the folder ./deps clone each repo specified in the matlab_requirements.txt file, if it doesn't already exist
+    for repo in $(cat $matlab_requirements_file | grep -vP '#' | grep -vP '^[ ]*$')
+    do 
+        repo_folder_name=$(echo $repo | grep -oP "[^/]+\.git" | sed 's/\.git//g')
+        echo "Checking for $repo_folder_name"
+        if [ ! -d $repo_folder_name ]; then 
+            echo -e "\n--------  Fetching $repo  --------\n"
+            git clone $repo
+        fi
+    done
+
+    # for each repo cloned into deps, fetch changes. ANY UPDATES MUST BE MERGED MANUALLY.
+    find $deps_folder -name .git -type d -exec sh -c '(cd $(dirname {}) && echo "\n------- Fetching changes for deps/$(basename $(pwd)) --------\n" && git fetch)' ';'
+
+    # find all source containing folders recursively (in /deps/, /new_deps/ and /src/), and add to a matlab project_addpath.m script
+    find $deps_folder -type d | xargs readlink -f | grep -v git | grep -v deprecated | grep -v @ |  sed 's/^/addpath\ /g ' > $addpath_script
+    find $new_deps_folder -type d | xargs readlink -f | grep -v git | grep -v deprecated | grep -v @ | sed 's/^/addpath\ /g ' >> $addpath_script
+    find $project_src_folder -type d | xargs readlink -f | grep -v git | grep -v deprecated | grep -v @ | sed 's/^/addpath\ /g ' >> $addpath_script
+
+    # add all repos inside deps/ folder to .gitignore file, and deduplicate
+    touch $project_folder/.gitignore
+    echo "deps/" >> $project_folder/.gitignore
+    cat $project_folder/.gitignore | sort | uniq > $project_folder/.gitignore~
+    rm $project_folder/.gitignore
+    mv $project_folder/.gitignore~ $project_folder/.gitignore
+
+    # find all matlab_requirements.txt files in /deps/ folder (i.e. in child repos), and add them to the matlab_requirements.txt of the top-level project. THEN RUN THIS COMMAND AGAIN.
+    find $project_folder -mindepth 2 -name matlab_requirements.txt | while read file; do cat $file >> $matlab_requirements_file; echo ""; done
+    cat $matlab_requirements_file | sort | uniq > "$matlab_requirements_file"_tmp
+    mv $matlab_requirements_file "$matlab_requirements_file"_old    
+    cp "$matlab_requirements_file"_tmp $matlab_requirements_file
+
+
+    # if current project folder is not a git repo, initialize git repo
+    if [ ! -d $project_folder/.git ]; then
+        cd $project_folder
+        git init
+    fi
+else
+    echo "Folder does not contain a matlab_requirements.txt! Are you sure this is a project folder?"
+fi
+
