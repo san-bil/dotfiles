@@ -30,7 +30,7 @@ if __name__ == "__main__":
                    print(mkdir_cmd)
 
                 symlink_path = os.path.join(new_item_parent,item_name)
-                symlink_cmd = "ln -s "+item+" "+symlink_path
+                symlink_cmd = "ln -sf "+item+" "+symlink_path
                 f.write(f+'\n')
 
     f.close()
