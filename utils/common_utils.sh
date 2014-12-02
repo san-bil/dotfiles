@@ -60,3 +60,17 @@ function ff_sort_s(){
 }
 
 
+function find_ansible_role_vars(){
+    roles_path=$(cat ~/.ansible.cfg | grep roles_path | sed 's/roles_path = //')
+    arr=($(echo -e $roles_path | tr ";" "\n"))
+
+    for x in $arr
+    do
+        if [ -d $x ]; then
+            find $x/$1 -type f -exec cat {} \; | grep -oP "{{\s*[^\}]*\s*}}"
+        fi 
+    done
+}
+
+
+
