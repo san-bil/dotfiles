@@ -50,3 +50,13 @@ function mfiles(){
 	    done
 	fi
 }
+
+function ff_sort(){
+    find $1 -maxdepth 1 -type f -printf "%T@ %Tc %p\n" | sort -n
+}
+
+function ff_sort_s(){
+    find $1 -maxdepth 1 -type f -printf "%T@ %Tc %p\n" | sort -n | grep -oP '\ [^ ]*\/.+' | cut -c 2-
+}
+
+
