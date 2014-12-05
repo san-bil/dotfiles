@@ -26,13 +26,26 @@ my_trash(){
     mv $1 $HOME/$(echo $USER)_trash
 }
 
+is_package_installed(){
+    INSTALLED=$(dpkg -l \grep $1)
+    if [ "$INSTALLED" != "" ]; then
+        echo "installed"
+    else
+        echo "not_installed"
+    fi
+}
+
 #---------------------Aliases------------------------------
 
 alias hn='hostname'
 alias treel='tree -L'
 alias treel2="tree -L 2"
 alias vimro="vim -R"
-alias rm='trash-put'
+
+if [[ "$(is_package_installed trash-cli)" == "installed" ]]; then
+    alias rm='trash-put'
+fi
+
 alias chmox="chmod +x"
 alias lsa="ls -alh"
 alias reproot='cd $(git rev-parse --show-toplevel)'
