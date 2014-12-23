@@ -41,6 +41,11 @@ alias hn='hostname'
 alias treel='tree -L'
 alias treel2="tree -L 2"
 alias vimro="vim -R"
+alias reloadrc="source $HOME/.common_rc"
+
+alias '...'='../..'
+alias '....'='../../..'
+alias '.....'='../../../..'
 
 if [[ "$(is_package_installed trash-cli)" == "installed" ]]; then
     alias rm='trash-put'
