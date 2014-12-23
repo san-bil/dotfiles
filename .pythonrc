@@ -16,5 +16,9 @@ del os, histfile, readline, rlcompleter
 
 import datetime, os, pprint, re, sys, time
 import numpy as np
-print("(imported datetime, os, pprint, re, sys, time, numpy as np)")
+import matplotlib as mpl
+mpl.use('GTK')
+import matplotlib.pyplot as plt
+import pandas
+print("(imported datetime, os, pprint, re, sys, time, numpy as np, matplotlib as mpl, matplotlib.pyplot as plt, pandas)")
 
