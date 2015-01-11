@@ -42,7 +42,7 @@ alias treel='tree -L'
 alias treel2="tree -L 2"
 alias vimro="vim -R"
 alias reloadrc="source $HOME/.common_rc"
-
+alias grepi="grep -i"
 alias '...'='../..'
 alias '....'='../../..'
 alias '.....'='../../../..'
