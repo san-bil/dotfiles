@@ -72,5 +72,15 @@ function find_ansible_role_vars(){
     done
 }
 
+function find_all_latex_figures(){
+    find $1 -name *.tex  | xargs cat | grep includegraphics | grep -oP "{[^}]*}"
+}
+
+
+function find_function_calls(){
+    grep -RoP "[0-9a-zA-Z|_]+\([^\)]*\)(\.[^\)]*\)+)?" $1
+}
+
+
 
 
