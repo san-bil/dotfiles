@@ -46,6 +46,7 @@ alias grepi="grep -i"
 alias '...'='../..'
 alias '....'='../../..'
 alias '.....'='../../../..'
+alias bighist='history -1000000'
 
 if [[ "$(is_package_installed trash-cli)" == "installed" ]]; then
     alias rm='trash-put'
@@ -60,7 +61,7 @@ alias shopen='gnome-open'
 alias pdl='pdflatex'
 alias ptp='ptpython'
 alias matlab_remote='/usr/local/MATLAB/R2014b/bin/matlab -nosplash -nodesktop -minimize' 
-
+alias grv='git remote -v'
 
 alias bfg='java -jar ~/bin/bfg-1.11.5.jar'
 alias ump='update_matlab_project `pwd`'
