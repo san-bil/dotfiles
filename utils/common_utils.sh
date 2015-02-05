@@ -82,5 +82,8 @@ function find_function_calls(){
 }
 
 
+function tmux_remote_list(){
 
+    for host in "$@"; do echo "$host"; ssh "$host" "tmux list-sessions" ; done
 
+}
