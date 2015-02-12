@@ -87,3 +87,11 @@ function tmux_remote_list(){
     for host in "$@"; do echo "$host"; ssh -o ConnectTimeout=5  "$host" "tmux list-sessions" ; done
 
 }
+
+function get_line(){
+    awk "NR == $1 {print; exit}"
+}
+
+function print_number_range(){
+    python -c "print ' '.join([str(x) for x in range($1,$2)])"
+}
